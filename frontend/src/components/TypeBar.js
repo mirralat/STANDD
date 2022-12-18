@@ -1,9 +1,10 @@
 import React, {useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import {ListGroup} from "react-bootstrap";
+import {Dropdown, ListGroup} from "react-bootstrap";
 import { fetchCatDevices, fetchDevices } from './https/deviceAPI';
 import "../styles/TypeBar.css"
+import {RUB, USD} from "../utils/consts";
 
 const TypeBar = observer(() => {
     const {devices} = useContext(Context);

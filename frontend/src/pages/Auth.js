@@ -26,7 +26,6 @@ const Auth = observer(() => {
             } else {
                 data = await registration(email, name, password);
             }
-            console.log(data);
             user.setUser(user);
             user.setIsAuth(true);
             navigation(SHOP_ROUTE);

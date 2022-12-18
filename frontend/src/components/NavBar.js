@@ -1,12 +1,12 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
-import {Button, Container, Form, Nav, Navbar, NavDropdown, InputGroup} from "react-bootstrap";
-import {ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
+import {Button, Container, Form, Nav, Navbar, NavDropdown, InputGroup, Dropdown} from "react-bootstrap";
+import {ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, RUB, SHOP_ROUTE, USD} from "../utils/consts";
 import {observer} from "mobx-react-lite";
 import TypeBar from "./TypeBar";
 import Shop from "../pages/Shop";
 import {NavLink, useNavigate} from "react-router-dom";
-import {fetchDevices, fetchFoundDevice} from "./https/deviceAPI";
+import {fetchDevices, fetchFoundDevice, fetchOneDevice, fetchTypes} from "./https/deviceAPI";
 import "../styles/NavBar.css"
 
 const NavBar = observer(() => {
@@ -21,6 +21,14 @@ const NavBar = observer(() => {
         localStorage.setItem('username', '')
         localStorage.setItem('password', '')
     }
+
+    useEffect(() => {
+        fetchDevices().then(data => {
+            devices.setDevices(data);
+        });
+        devices.setBasket(devices.basket)
+        fetchTypes().then(data => devices.setTypes(data));
+    }, [devices.currency])
 
     const search = (searchItem)=>{
         fetchDevices().then(data=>devices.setDevices(data)).then(()=>devices.setDevices(devices.devices.filter(({name})=>name.indexOf(searchItem) !== -1)))
@@ -53,6 +61,18 @@ const NavBar = observer(() => {
                                         user.isAuth && <Nav.Link onClick={() => navigate(BASKET_ROUTE) } >Корзина</Nav.Link>
                                     }
                                 </div>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        {devices.currency}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        {devices.currency === USD ?
+                                            <Dropdown.Item onClick={()=>devices.setCurrency(RUB)}>Рубль Россия (RUB)</Dropdown.Item>
+                                             :
+                                            <Dropdown.Item onClick={()=>devices.setCurrency(USD)}>Доллар США (USD)</Dropdown.Item>
+                                        }
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </div>
                             :
                             <div className={"d-flex justify-content-end"}>

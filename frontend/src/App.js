@@ -13,8 +13,6 @@ const App = observer(() => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log(localStorage.getItem('username')) 
-        console.log(localStorage.getItem('password'))
         login(localStorage.getItem('username'), localStorage.getItem('password')).then(data => {
             user.setIsAuth(true)
             user.setUser(user);

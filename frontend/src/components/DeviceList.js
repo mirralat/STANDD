@@ -10,7 +10,7 @@ const DeviceList = observer(() => {
     return (
         <Row className="deviceList">
             {devices.devices.map((device)=>
-                <DeviceItem key={device.id} device={device} />
+                <DeviceItem key={device.id} device={device} currency={devices.currency}/>
             )}
         </Row>
     );

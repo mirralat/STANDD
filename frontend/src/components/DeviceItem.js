@@ -1,16 +1,14 @@
 import React, { useContext, useState } from 'react';
 import {Card, Col, Image} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import {DEVICE_ROUTE, STAR} from "../utils/consts";
+import {DEVICE_ROUTE, STAR, USD} from "../utils/consts";
 import "../styles/DeviceItem.css"
 import { Context } from '../index';
+import {observer} from "mobx-react-lite";
 
 
-const DeviceItem = ({device}) => {
+const DeviceItem = observer(({device, currency}) => {
     const {devices} = useContext(Context)
-
-    const [state, setState] = useState(false);
-    const [like, setLike] = useState({})
 
     const navigate = useNavigate();
     return (
@@ -23,21 +21,30 @@ const DeviceItem = ({device}) => {
                 <div className='description'>{device.description}</div>
             </div>
             <div className='bars'>
-                <div className='price'>
-                    <div className='oldPrice'>{device.price/0.8}</div>
-                    <div>{device.price} ₽</div>
-                    <div className='credit'>{(device.price / 12).toFixed(3)} ₽/мес</div>
-                </div>
+                {currency === USD ?
+                    <div className='price'>
+                        <div className='oldPrice'>{device.price/0.8}</div>
+                        <div>{device.price} $</div>
+                        <div className='credit'>{(device.price / 12).toFixed(3)} $/мес</div>
+                    </div> :
+                    <div className='price'>
+                        <div className='oldPrice'>{device.price/0.8 * device.rub}</div>
+                        <div>{device.price * device.rub} ₽</div>
+                        <div className='credit'>{(device.price / 12 * device.rub).toFixed(3)} ₽/мес</div>
+                    </div>
+                }
+
                 <div className='buttons'>
-                    <button className={ !state?'notLiked':'liked'} onClick={(e) => 0}>
-                        { !state?
+                    <button className={ !(device.id === devices.like.id)?'notLiked':'liked'} onClick={() => {
+                        devices.setLike(device)
+                    }}>
+                        { !(device.id === devices.like.id)?
                             <img src={require('../images/like.png')} alt="fireSpot" className='likeIconOff'></img>
                         :
                             <img src={require('../images/like-clicked.png')} alt="fireSpot" className='likeIconOn'></img>
                         }
                     </button>
                     <button onClick={()=>{
-                        console.log(device)
                         devices.addBasket(device)
                         }} className='miniBasket'>
                         В корзину
@@ -46,6 +53,6 @@ const DeviceItem = ({device}) => {
             </div>
         </Col>
     );
-};
+})
 
 export default DeviceItem;

@@ -5,3 +5,5 @@ export const SHOP_ROUTE = "/";
 export const BASKET_ROUTE = "/basket";
 export const DEVICE_ROUTE = "/api/product";
 export const STAR = "https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-star-vector-icon-png-image_696411.jpg"
+export const RUB = "RUB";
+export const USD = "USD";
