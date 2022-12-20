@@ -26,7 +26,8 @@ def debug_task(self):
 @shared_task(name='get_quotation')
 def update_quo():
     data = requests.get('https://openexchangerates.org/api/latest.json?app_id='
-                        '0b616504eb51439fbf7d0a5654c4e931&base=USD&symbols=RUB').json()
+                        '5dd75d2cb0a24ddd98dc20faef881287&base=USD&symbols=RUB').json()
     qou = int(data['rates']['RUB'])
+    print(qou)
 
     return qou
